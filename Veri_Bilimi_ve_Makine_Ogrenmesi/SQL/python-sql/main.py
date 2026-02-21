@@ -52,6 +52,14 @@ def insert_tuple_data(cursor):
     ]
 
     cursor.executemany('INSERT INTO Courses VALUES (?,?,?,?)', courses)
+
+
+def basic_sql_operations(cursor):
+    cursor.execute('SELECT * FROM  Students')
+    data = cursor.fetchall() # fetch all data(data comes as tuple)
+    print(f"\n{10*"*"}Students table:{10*"*"}\n")
+    for row in data:
+        print(row)
 def main():
     conn, cursor = create_database()
 
@@ -62,6 +70,8 @@ def main():
         print("✅ INFO: Data inserted successfully.")
         insert_tuple_data(cursor)
         print("✅INFO: Tuple Data inserted successfully.")
+        basic_sql_operations(cursor)
+
         conn.commit()
     except sqlite3.Error as error:
         print(f"❌ ERROR: There was an error while creating tables: {error}")
