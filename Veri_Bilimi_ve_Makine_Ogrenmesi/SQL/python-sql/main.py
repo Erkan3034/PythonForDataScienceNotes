@@ -40,6 +40,18 @@ def insert_data(cursor):
     ('Fatma',23,'fatma@mail.com','Bursa'),
     ('Ali',24,'ali@mail.com','Ankara')
     ''')
+
+
+
+def insert_tuple_data(cursor):
+
+    courses= [
+        (1,'Python','Erkan',5),
+        (2,'Java','Serkan',6),
+        (3,'Php', 'Necip', 8)
+    ]
+
+    cursor.executemany('INSERT INTO Courses VALUES (?,?,?,?)', courses)
 def main():
     conn, cursor = create_database()
 
@@ -48,6 +60,8 @@ def main():
         print("✅ INFO: Tables created successfully.")
         insert_data(cursor)
         print("✅ INFO: Data inserted successfully.")
+        insert_tuple_data(cursor)
+        print("✅INFO: Tuple Data inserted successfully.")
         conn.commit()
     except sqlite3.Error as error:
         print(f"❌ ERROR: There was an error while creating tables: {error}")
