@@ -38,7 +38,8 @@ def insert_data(cursor):
     ('Mehmet',22,'mehmet@mail.com','Istanbul'),
     ('Ayse',21,'ayse@mail.com','Izmir'),
     ('Fatma',23,'fatma@mail.com','Bursa'),
-    ('Ali',24,'ali@mail.com','Ankara')
+    ('Ali',24,'ali@mail.com','Ankara'),
+    ('Erkan',22,'turguterkan@gmail.com', 'Istanbul')   
     ''')
 
 
@@ -93,6 +94,30 @@ def update_delete_operations(cursor):
 
 
 
+def aggregate_functions(cursor):
+    print(f"\n{10*"-"} Aggregate Functions COUNT {10*"-"}")
+    cursor.execute('SELECT COUNT(*) FROM Students') #COUNT(*) → Students tablosundaki toplam satır sayısını verir
+    result = cursor.fetchone()
+    print(result[0]) #tuple dan gercek sayıyı al.
+
+    print(f"{10*"-"} Aggregate Functions AVERAGE {10*"-"}")
+    cursor.execute('SELECT AVG(age) FROM Students') # age sütunun aritmetik ortalamasını alır.
+    result = cursor.fetchone()
+    print(result[0])
+
+    print(f"{10 * "-"} Aggregate Functions MAX-MIN {10 * "-"}")
+    cursor.execute('SELECT MAX(age) , MIN(age) FROM Students') #En büyük - en kucuk yas
+    result = cursor.fetchone()
+    max_age , min_age = result
+    print("Max Age: ",max_age)
+    print("Min Age: " ,min_age)
+
+    print(f"{10 * "-"} Aggregate Functions GROUP BY{10 * "-"}")
+    cursor.execute("SELECT city, COUNT(*) From Students GROUP BY city") # öğrencileri sehirlerine göre sıralar, her sehir için öğrenci sayısını aır.
+    result = cursor.fetchall()
+    for city,count in result:
+        print(city, ": " , count)
+
 
 
 def main():
@@ -107,7 +132,7 @@ def main():
         print("✅INFO: Tuple Data inserted successfully.")
         select_operations(cursor)
         update_delete_operations(cursor)
-
+        aggregate_functions(cursor)
         conn.commit()
     except sqlite3.Error as error:
         print(f"❌ ERROR: There was an error while creating tables: {error}")
