@@ -54,12 +54,47 @@ def insert_tuple_data(cursor):
     cursor.executemany('INSERT INTO Courses VALUES (?,?,?,?)', courses)
 
 
-def basic_sql_operations(cursor):
+def select_operations(cursor):
     cursor.execute('SELECT * FROM  Students')
     data = cursor.fetchall() # fetch all data(data comes as tuple)
-    print(f"\n{10*"*"}Students table:{10*"*"}\n")
+    print(f"\n{10*"*"}Students table - SELECT ALL -:{10*"*"}\n")
     for row in data:
         print(row)
+
+    cursor.execute('SELECT name,age FROM Students')
+    records = cursor.fetchall()
+    print("***********SELECT COLUMN*********** \n" , records)
+
+
+    name_conditions = cursor.execute('SELECT * FROM Students WHERE name = ?', ("Ayse",))
+    print("***********WHERE name = Ayse ************:\n" , name_conditions.fetchone())
+
+    print("************ORDER BY **************\n") #aldığımız sonucları belirlenen kritere göre sıralar
+    cursor.execute('SELECT * From Courses ORDER BY  credits ')
+    data = cursor.fetchall()
+    for row in data:
+        print(row)
+
+    print("************LIMIT BY **************\n")  # aldığımız sonucları belirlenen kritere göre sıralar
+    cursor.execute('SELECT * From Courses  LIMIT 2 ')
+    data = cursor.fetchall()
+    for row in data:
+        print(row)
+
+
+def update_delete_operations(cursor):
+    print("***********UPDATE *************\n")
+    cursor.execute(" Update Students set age = 25 where name = 'Ahmet'")
+    print(cursor.execute("SELECT * from Students where name = 'Ahmet'").fetchall())
+
+    print("************DELETE *************\n")
+    cursor.execute(" Delete from Students where name = 'Ahmet'")
+    print(cursor.execute("SELECT * from Students").fetchall())
+
+
+
+
+
 def main():
     conn, cursor = create_database()
 
@@ -70,14 +105,14 @@ def main():
         print("✅ INFO: Data inserted successfully.")
         insert_tuple_data(cursor)
         print("✅INFO: Tuple Data inserted successfully.")
-        basic_sql_operations(cursor)
+        select_operations(cursor)
+        update_delete_operations(cursor)
 
         conn.commit()
     except sqlite3.Error as error:
         print(f"❌ ERROR: There was an error while creating tables: {error}")
     finally:
         conn.close()
-
 
 if __name__ == "__main__":
     main()
