@@ -118,6 +118,16 @@ def aggregate_functions(cursor):
     for city,count in result:
         print(city, ": " , count)
 
+    print(f"{10 * "-"} Aggregate Functions HAVING {10 * "-"}")
+    cursor.execute("""
+                   SELECT city, COUNT(*)
+                   FROM Students
+                   GROUP BY city
+                   HAVING COUNT(*) > 1
+                   """)
+
+    for city2, count2 in cursor.fetchall():
+        print(city2, count2)
 
 
 def main():
